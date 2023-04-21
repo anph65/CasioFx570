@@ -163,6 +163,8 @@ def handle_other_button(button):
         if stored_value is not None:
             stored_value -= float(current_value)
             st.write(stored_value)
-if __name__ == "__main__":
-    main()
+def main():
+    pass
 
+if __name__ == '__main__':
+    main()
