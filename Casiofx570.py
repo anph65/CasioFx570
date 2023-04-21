@@ -1,3 +1,4 @@
+from curses import BUTTON_ALT
 import streamlit as st
 import math
 
@@ -22,6 +23,28 @@ buttons = [
     "0", ".", "Ans", "+", "=",
     "(", ")", "AC", "M+", "M-",
 ]
+# Create the button layout
+for i in range(NUM_BUTTON_ROWS):
+    button_row = []
+    for j in range(NUM_BUTTON_COLS):
+        button_index = i * NUM_BUTTON_COLS + j
+        if button_index >= len(buttons):
+            break
+        button = buttons[button_index]
+        button_row.append(button)
+    button_cols = st.columns(len(button_row))
+    for k in range(len(button_row)):
+        button = button_row[k]
+        with button_cols[k]:
+            if button == "=":
+                if st.button(button, key=button):
+                    handle_operator_button(button)
+            else:
+                if st.button(button, key=button):
+                    if is_number(button):
+                        handle_number_button(button)
+                    else:
+                        handle_other_button(button)
 
 # Helper functions
 def is_number(value):
@@ -164,7 +187,31 @@ def handle_other_button(button):
             stored_value -= float(current_value)
             st.write(stored_value)
 def main():
-    pass
+    st.title("Casio Fx-570 Calculator")
+    st.write("Enter a calculation and press '=' to evaluate.")
+    global current_value, stored_value, current_operator
+    current_value = ""
+    stored_value = None
+    current_operator = None
+    for i in range(NUM_BUTTON_ROWS):
+        button_row = []
+        for j in range(NUM_BUTTON_COLS):
+            button_index = i * NUM_BUTTON_COLS + j
+            if button_index >= len(buttons):
+                break
+            button = buttons[button_index]
+            button_row.append(button)
+        button_cols = st.columns(len(button_row))
+        for k in range(len(button_row)):
+            button = button_row[k]
+            with button_cols[k]:
+                if button == "=":
+                    if st.button(button, key=button):
+                        handle_operator_button(button)
+                else:
+                    if st.button(button, key=button):
+                        if is_number(button):
+                            handle_number_button(button)
+                        else:
+                            handle_other_button(button)
 
-if __name__ == '__main__':
-    main()
